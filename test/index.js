@@ -1,7 +1,5 @@
 let noteTitle;
 let noteText;
-let noteId;
-
 let saveNoteBtn;
 let newNoteBtn;
 let noteList;
@@ -44,8 +42,8 @@ const saveNote = (note) =>
     body: JSON.stringify(note),
   });
 
-const deleteNote = (Id) =>
-  fetch(`/api/notes/${Id}`, {
+const deleteNote = (id) =>
+  fetch(`/api/notes/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -58,20 +56,14 @@ const renderActiveNote = () => {
   if (activeNote.id) {
     noteTitle.setAttribute('readonly', true);
     noteText.setAttribute('readonly', true);
-    noteId.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;
     noteText.value = activeNote.text;
-    noteId.value = activeNote.id;
   } else {
     noteTitle.removeAttribute('readonly');
     noteText.removeAttribute('readonly');
-    noteId.removeAttribute('readonly');
     noteTitle.value = '';
     noteText.value = '';
-    noteId.value = '';
   }
-
-  
 };
 
 const handleNoteSave = () => {
@@ -91,7 +83,7 @@ const handleNoteDelete = (e) => {
   e.stopPropagation();
 
   const note = e.target;
-  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).note_id;
+  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
 
   if (activeNote.id === noteId) {
     activeNote = {};
@@ -154,7 +146,6 @@ const renderNoteList = async (notes) => {
         'text-danger',
         'delete-note'
       );
-  
       delBtnEl.addEventListener('click', handleNoteDelete);
 
       liEl.append(delBtnEl);
